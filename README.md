@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Beste Web - Site Institucional e CRM
 
-## Getting Started
+Site institucional da Beste Web com sistema interno de CRM para gerenciamento de leads.
 
-First, run the development server:
+## 🚀 Tecnologias
 
+- **Next.js 16** - Framework React
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS 4** - Estilização
+- **OpenAI GPT-4o-mini** - Chatbot com IA
+- **n8n** - Automação de webhooks
+
+## 📋 Pré-requisitos
+
+- Node.js 18+ 
+- npm ou yarn
+- Conta OpenAI (para o chatbot)
+
+## 🔧 Instalação
+
+1. Clone o repositório:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <seu-repositorio>
+cd beste-we-site
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Instale as dependências:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Configure as variáveis de ambiente:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edite o `.env.local` e adicione:
+```env
+OPENAI_API_KEY=sk-sua-chave-aqui
+ADMIN_PASSWORD=sua-senha-segura-aqui
+NODE_ENV=production
+```
 
-## Learn More
+4. Execute o servidor de desenvolvimento:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Acesse [http://localhost:3000](http://localhost:3000)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏗️ Build para Produção
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+npm start
+```
 
-## Deploy on Vercel
+## 📁 Estrutura do Projeto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+beste-we-site/
+├── src/
+│   ├── app/              # Rotas e páginas
+│   │   ├── api/          # API routes
+│   │   ├── dashboard/    # CRM interno
+│   │   └── ...
+│   ├── components/       # Componentes React
+│   ├── lib/             # Utilitários e banco de dados
+│   └── styles/          # Estilos globais
+├── data/                # Banco de dados local (JSON)
+└── public/              # Arquivos estáticos
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔐 Segurança
+
+⚠️ **IMPORTANTE PARA PRODUÇÃO:**
+
+1. **Senha do Admin**: Configure `ADMIN_PASSWORD` no `.env.local` com uma senha forte
+2. **API Key OpenAI**: Mantenha a chave segura, nunca commite no Git
+3. **Banco de Dados**: O diretório `/data` está no `.gitignore` e não será commitado
+4. **Autenticação**: Atualmente usa sessão simples - considere implementar JWT em produção
+
+## 🌐 Deploy
+
+### Vercel (Recomendado)
+
+1. Conecte seu repositório GitHub à Vercel
+2. Configure as variáveis de ambiente:
+   - `OPENAI_API_KEY`
+   - `ADMIN_PASSWORD`
+   - `NODE_ENV=production`
+3. Deploy automático a cada push
+
+### Outros Provedores
+
+O projeto é compatível com qualquer provedor que suporte Next.js:
+- Netlify
+- Railway
+- AWS Amplify
+- DigitalOcean App Platform
+
+## 📝 Variáveis de Ambiente
+
+Veja `ENV_SETUP.md` para detalhes completos sobre as variáveis de ambiente.
+
+### Obrigatórias:
+- `OPENAI_API_KEY` - Chave da API OpenAI
+- `ADMIN_PASSWORD` - Senha do administrador
+
+### Opcionais:
+- `N8N_WEBHOOK_TEST` - Webhook n8n para testes
+- `N8N_WEBHOOK_PROD` - Webhook n8n para produção
+- `NODE_ENV` - Ambiente (development/production)
+
+## 🎯 Funcionalidades
+
+- ✅ Site institucional responsivo
+- ✅ Formulário de contato com integração n8n
+- ✅ Chatbot com IA para primeiro atendimento
+- ✅ CRM interno com visualização Kanban
+- ✅ Sistema de autenticação
+- ✅ Gerenciamento de leads
+- ✅ Notas e status de leads
+
+## 📞 Suporte
+
+Para dúvidas ou problemas, entre em contato:
+- Email: contato@besteweb.com.br
+- WhatsApp: (41) 99830-6017
+
+## 📄 Licença
+
+Todos os direitos reservados © 2025 Beste Web
