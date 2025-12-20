@@ -218,29 +218,43 @@ htop
 
 ## ⚠️ Troubleshooting
 
-### Aplicação não inicia
-```bash
-# Verificar logs
-pm2 logs beste-web --lines 50
+Veja o arquivo `TROUBLESHOOTING.md` para diagnóstico completo.
 
-# Verificar se a porta 3000 está em uso
-sudo netstat -tulpn | grep 3000
-```
+### Diagnóstico Rápido
 
-### Nginx não funciona
 ```bash
-# Verificar configuração
+# 1. Verificar se aplicação está rodando
+pm2 status
+
+# 2. Verificar se porta 3000 está ativa
+curl http://localhost:3000
+
+# 3. Verificar Nginx
+sudo systemctl status nginx
 sudo nginx -t
 
-# Ver logs
+# 4. Ver logs
+pm2 logs beste-web --lines 50
 sudo tail -f /var/log/nginx/error.log
 ```
 
-### Erro de permissão
+### Problemas Comuns
+
+**502 Bad Gateway**: Aplicação não está rodando
 ```bash
-# Ajustar permissões do diretório data
-sudo chown -R $USER:$USER /var/www/site-beste/data
-chmod -R 755 /var/www/site-beste/data
+pm2 restart beste-web
+```
+
+**Connection Refused**: Firewall ou aplicação não iniciou
+```bash
+sudo ufw allow 3000/tcp
+pm2 restart beste-web
+```
+
+**Erro 500**: Verificar logs e variáveis de ambiente
+```bash
+pm2 logs beste-web
+cat .env.local
 ```
 
 ## 🔄 Atualizações Futuras
