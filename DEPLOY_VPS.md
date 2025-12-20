@@ -80,6 +80,10 @@ npm run build
 
 ```bash
 # Iniciar aplicação com PM2
+# Se a porta 3000 estiver em uso, use a porta 3001:
+PORT=3001 pm2 start npm --name "beste-web" -- start
+
+# Ou se quiser usar a porta padrão 3000:
 pm2 start npm --name "beste-web" -- start
 
 # Salvar configuração do PM2
@@ -89,6 +93,8 @@ pm2 save
 pm2 startup
 # Execute o comando que aparecer (geralmente algo como: sudo env PATH=...)
 ```
+
+**Nota**: Se você já tem outro serviço na porta 3000 (como Chat Woot), use a porta 3001 e atualize o `proxy_pass` no Nginx para `http://localhost:3001`.
 
 ## 🌐 Passo 7: Configurar Nginx
 
@@ -104,7 +110,7 @@ server {
     server_name besteweb.com.br www.besteweb.com.br;
 
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3001;  # Use 3001 se 3000 estiver em uso
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -116,6 +122,8 @@ server {
     }
 }
 ```
+
+**Nota**: Se sua aplicação estiver na porta 3000, use `http://localhost:3000`. Se estiver na 3001, use `http://localhost:3001`.
 
 Ativar o site:
 ```bash
