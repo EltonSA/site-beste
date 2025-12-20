@@ -2,7 +2,7 @@ import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import Chatbot from "@/components/site/Chatbot";
 
-export default function BlogLayout({ children }: { children: React.ReactNode }) {
+export default function IndicacoesLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-dvh relative">
       {/* Background gradiente sutil */}

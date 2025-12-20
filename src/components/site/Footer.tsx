@@ -21,7 +21,7 @@ export default function Footer() {
             <Link href="/cases" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
               Cases
             </Link>
-            <Link href="/blog" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
+            <Link href="/indicacoes" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
               Indica Beste
             </Link>
             <Link href="/contato" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
