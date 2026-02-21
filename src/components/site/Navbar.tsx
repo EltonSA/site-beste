@@ -39,8 +39,8 @@ export default function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "glass border-b border-white/20 shadow-lg shadow-black/5"
-          : "bg-transparent border-b border-transparent"
+          ? "bg-zinc-200/90 backdrop-blur-md border-b border-zinc-300/50 shadow-lg shadow-black/5"
+          : "bg-zinc-100/70 backdrop-blur-sm border-b border-zinc-200/50"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-12">
@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg text-zinc-700 hover:bg-zinc-100 transition-colors"
+          className="md:hidden p-2 rounded-lg text-zinc-700 hover:bg-zinc-200/80 transition-colors"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? (
@@ -82,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute inset-x-0 top-full glass border-b border-white/20 shadow-lg bg-white/95 backdrop-blur-lg">
+        <div className="md:hidden absolute inset-x-0 top-full bg-zinc-200/95 backdrop-blur-lg border-b border-zinc-300/50 shadow-lg">
           <div className="px-4 py-6 space-y-4">
             {links.map((l) => (
               <Link

@@ -103,24 +103,24 @@ export default function ChatSimulation() {
   }, [currentMessageIndex]);
 
   return (
-    <div className="glass rounded-2xl md:rounded-3xl p-4 md:p-6 shadow-2xl border border-white/30 max-w-2xl mx-auto">
+    <div className="glass rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 shadow-2xl border border-white/30 max-w-2xl mx-auto w-full">
       {/* Header do Chat */}
-      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-zinc-200/50">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center text-white shadow-lg">
-          <Bot className="w-6 h-6" />
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-zinc-200/50">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center text-white shadow-lg shrink-0">
+          <Bot className="w-5 h-5 sm:w-6 sm:h-6" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-zinc-900">Assistente IA</h3>
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <h3 className="font-bold text-zinc-900 text-sm sm:text-base">Assistente IA</h3>
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500 animate-pulse shrink-0"></div>
           </div>
-          <p className="text-xs text-zinc-500">Online • Responde instantaneamente</p>
+          <p className="text-[10px] sm:text-xs text-zinc-500 truncate">Online • Responde instantaneamente</p>
         </div>
-        <Sparkles className="w-5 h-5 text-orange-500 animate-pulse" />
+        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 animate-pulse shrink-0" />
       </div>
 
       {/* Mensagens */}
-      <div className="space-y-3 md:space-y-4 min-h-[300px] md:min-h-[400px] max-h-[400px] md:max-h-[500px] overflow-y-auto pr-2">
+      <div className="space-y-2 sm:space-y-3 md:space-y-4 min-h-[260px] sm:min-h-[300px] md:min-h-[400px] max-h-[320px] sm:max-h-[400px] md:max-h-[500px] overflow-y-auto pr-1 sm:pr-2">
         {messages.map((message) => (
           <div
             key={message.id}
@@ -135,13 +135,13 @@ export default function ChatSimulation() {
               </div>
             )}
             <div
-              className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+              className={`max-w-[85%] sm:max-w-[75%] rounded-xl sm:rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 ${
                 message.sender === "user"
                   ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white"
                   : "bg-zinc-100 text-zinc-900"
               }`}
             >
-              <p className="text-sm leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed break-words">
                 {message.displayedText}
                 {message.displayedText.length < message.text.length && (
                   <span className="inline-block w-2 h-4 bg-current ml-1 animate-pulse">|</span>

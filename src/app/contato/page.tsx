@@ -75,7 +75,7 @@ export default async function ContatoPage({
                     <div>
                       <div className="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-1">WhatsApp</div>
                       <a
-                        href="https://wa.me/5541998306017"
+                        href="https://wa.me/5541984706670?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20da%20Beste%20Web."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-lg font-semibold text-zinc-900 hover:text-green-600 transition-colors"
