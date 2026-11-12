@@ -1,19 +1,30 @@
 import "@/styles/globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Inter, Montserrat } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
-    default: "Beste Web — Automação, IA e Desenvolvimento",
+    default: "Beste Web — Automação de WhatsApp, IA e Processos",
     template: "%s • Beste Web",
   },
   description:
-    "Agência de tecnologia focada em automação, integrações com inteligência artificial, sites e micro-SaaS.",
+    "A Beste Web cria automações de WhatsApp, agentes de IA e integrações que atendem, qualificam leads, agendam e alimentam seu CRM 24 horas por dia.",
   metadataBase: new URL("https://besteweb.com.br"),
   openGraph: {
-    title: "Beste Web — Automação, IA e Desenvolvimento",
+    title: "Beste Web — Automação de WhatsApp, IA e Processos",
     description:
-      "Automação, integrações com IA, desenvolvimento de sites e micro-SaaS.",
+      "Seu WhatsApp vendendo e atendendo no automático, com IA e integrações ao seu CRM.",
     type: "website",
+    locale: "pt_BR",
+    siteName: "Beste Web",
     images: ["/og/og-default.png"],
   },
   icons: {
@@ -21,11 +32,15 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#08133a",
+};
+
 const GTM_ID = "GTM-TWVQRZBM";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={`${inter.variable} ${montserrat.variable}`}>
       <head>
         {/* Google Tag Manager */}
         <script

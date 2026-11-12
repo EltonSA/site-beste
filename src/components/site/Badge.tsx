@@ -1,6 +1,26 @@
-export default function Badge({ children }: { children: React.ReactNode }) {
+import { cn } from "@/lib/utils";
+
+/** Rótulo "eyebrow" acima de títulos. tone="dark" para fundos escuros. */
+export default function Badge({
+  children,
+  tone = "light",
+  className,
+}: {
+  children: React.ReactNode;
+  tone?: "light" | "dark";
+  className?: string;
+}) {
   return (
-    <span className="inline-flex items-center rounded-full glass border border-white/30 px-4 py-2 text-xs font-semibold text-zinc-700 shadow-lg transition-all duration-300 hover:border-blue-300 hover:bg-blue-50/50 hover:scale-105 hover:shadow-xl">
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide",
+        tone === "dark"
+          ? "border border-white/15 bg-white/5 text-white/80"
+          : "border border-royal-600/15 bg-royal-50 text-royal-700",
+        className,
+      )}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-gradient-brand" aria-hidden="true" />
       {children}
     </span>
   );

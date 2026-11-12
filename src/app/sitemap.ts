@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://besteweb.com.br";
-  const routes = ["", "/servicos", "/cases", "/micro-saas", "/indicacoes", "/contato"];
+  const routes = ["", "/servicos", "/cases", "/indicacoes", "/contato"];
 
   return routes.map((r) => ({
     url: `${baseUrl}${r}`,

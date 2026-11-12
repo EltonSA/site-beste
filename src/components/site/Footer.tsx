@@ -1,59 +1,97 @@
 import Link from "next/link";
+import { Mail, MapPin } from "lucide-react";
 import Logo from "./Logo";
+import Container from "./Container";
+import { SITE, WHATSAPP_URL } from "@/lib/site";
+import { WhatsAppIcon } from "@/components/ui/Button";
+
+const columns = [
+  {
+    title: "Automação",
+    links: [
+      { href: "/servicos#whatsapp", label: "Automação de WhatsApp" },
+      { href: "/servicos#ia", label: "Agentes de IA" },
+      { href: "/servicos#integracoes", label: "Integrações e CRM" },
+      { href: "/servicos#processos", label: "Processos internos" },
+    ],
+  },
+  {
+    title: "Empresa",
+    links: [
+      { href: "/cases", label: "Cases" },
+      { href: "/indicacoes", label: "Indica Beste" },
+      { href: "/contato", label: "Contato" },
+      { href: "/entrar", label: "Área do cliente" },
+    ],
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-zinc-200/50 bg-white/50 backdrop-blur-sm">
-      <div className="mx-auto grid max-w-7xl gap-8 sm:gap-10 md:gap-12 px-4 py-10 sm:px-6 sm:py-12 md:px-8 md:py-16 lg:px-12 md:grid-cols-3">
-        <div className="space-y-3 sm:space-y-4">
-          <Logo />
-          <p className="text-xs sm:text-sm leading-relaxed text-zinc-600 max-w-xs">
-            Automação, IA e desenvolvimento para escalar negócios com tecnologia inteligente.
-          </p>
-        </div>
-
-        <div className="text-sm">
-          <div className="font-bold text-zinc-900 mb-3 sm:mb-4">Mapa do site</div>
-          <div className="grid gap-2 sm:gap-3">
-            <Link href="/servicos" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
-              Serviços
-            </Link>
-            <Link href="/cases" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
-              Cases
-            </Link>
-            <Link href="/indicacoes" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
-              Indica Beste
-            </Link>
-            <Link href="/contato" className="text-zinc-600 transition-colors hover:text-blue-600 font-medium">
-              Contato
-            </Link>
-          </div>
-        </div>
-
-        <div className="text-sm">
-          <div className="font-bold text-zinc-900 mb-3 sm:mb-4">Contato</div>
-          <div className="grid gap-2 sm:gap-3">
+    <footer className="relative overflow-hidden bg-navy-950 text-white">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-brand opacity-60" aria-hidden="true" />
+      <Container className="py-14 sm:py-16">
+        <div className="grid gap-10 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <Logo />
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
+              Automação de WhatsApp, agentes de IA e integrações para empresas que querem vender e atender mais, sem
+              aumentar a equipe.
+            </p>
             <a
-              href="https://wa.me/5541984706670?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20servi%C3%A7os%20da%20Beste%20Web."
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-zinc-600 transition-colors hover:text-blue-600 font-medium"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10"
             >
-              WhatsApp: (41) 98470-6670
-            </a>
-            <a
-              href="mailto:contato@besteweb.com.br"
-              className="text-zinc-600 transition-colors hover:text-blue-600 font-medium"
-            >
-              E-mail: contato@besteweb.com.br
+              <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
+              Fale com a gente no WhatsApp
             </a>
           </div>
-        </div>
-      </div>
 
-      <div className="border-t border-zinc-200/50 bg-zinc-50/30 backdrop-blur-sm py-4 sm:py-6 text-center text-xs text-zinc-500 px-4">
-        © {new Date().getFullYear()} Beste Web. Todos os direitos reservados.
-      </div>
+          {columns.map((col) => (
+            <div key={col.title} className="md:col-span-2">
+              <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/40">{col.title}</div>
+              <ul className="mt-4 space-y-3">
+                {col.links.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="text-sm text-white/70 transition-colors hover:text-white">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          <div className="md:col-span-3">
+            <div className="text-xs font-semibold uppercase tracking-[0.14em] text-white/40">Contato</div>
+            <ul className="mt-4 space-y-3 text-sm text-white/70">
+              <li>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-white">
+                  <WhatsAppIcon className="h-4 w-4 shrink-0" />
+                  {SITE.phoneDisplay}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${SITE.email}`} className="inline-flex items-center gap-2 break-all hover:text-white">
+                  <Mail className="h-4 w-4 shrink-0" />
+                  {SITE.email}
+                </a>
+              </li>
+              <li className="inline-flex items-center gap-2">
+                <MapPin className="h-4 w-4 shrink-0" />
+                {SITE.location}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between">
+          <span>© {new Date().getFullYear()} Beste Web. Todos os direitos reservados.</span>
+          <span>Feito com tecnologia própria em Curitiba.</span>
+        </div>
+      </Container>
     </footer>
   );
 }

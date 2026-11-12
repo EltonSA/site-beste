@@ -3,9 +3,15 @@ import { cn } from "@/lib/utils";
 export default function Section({
   children,
   className,
+  id,
 }: {
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }) {
-  return <section className={cn("py-12 sm:py-16 md:py-24 lg:py-32", className)}>{children}</section>;
+  return (
+    <section id={id} className={cn("py-16 sm:py-20 lg:py-28", className)}>
+      {children}
+    </section>
+  );
 }

@@ -593,7 +593,7 @@ export default function DashboardPage() {
 
       {/* Modal de Notas */}
       {selectedLead && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeInUp">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-up">
           <div className="glass rounded-3xl p-8 max-w-lg w-full border-2 border-blue-200 shadow-2xl shadow-blue-500/20 relative overflow-hidden">
             {/* Decoração de fundo */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-400/20 to-orange-400/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>

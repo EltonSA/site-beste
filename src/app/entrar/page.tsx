@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Container from "@/components/site/Container";
-import Section from "@/components/site/Section";
-import Badge from "@/components/site/Badge";
-import { LogIn, Lock, Mail } from "lucide-react";
+import { ArrowRight, Loader2, Lock } from "lucide-react";
+import LogoMark from "@/components/site/LogoMark";
+import { buttonClasses } from "@/components/ui/Button";
+
+const field =
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-[0.95rem] text-navy-900 placeholder:text-slate-400 transition-colors focus:border-royal-500 focus:outline-none focus:ring-4 focus:ring-royal-500/10";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -45,7 +47,7 @@ export default function LoginPage() {
       } else {
         setError(data.message || "Credenciais inválidas");
       }
-    } catch (err) {
+    } catch {
       setError("Erro ao fazer login. Tente novamente.");
     } finally {
       setLoading(false);
@@ -53,78 +55,78 @@ export default function LoginPage() {
   }
 
   return (
-    <Section className="pt-16 md:pt-1 pb-16 md:pb-40 min-h-screen flex items-center">
-      <Container>
-        <div className="max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <Badge>Área Restrita</Badge>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-zinc-900 mt-4">
-              Entrar no{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
-                CRM
-              </span>
-            </h1>
-            <p className="text-zinc-600 mt-3">
-              Acesse o painel de controle de leads
-            </p>
+    <div className="flex min-h-dvh items-center justify-center px-4 pb-16 pt-28">
+      <div className="w-full max-w-md animate-fade-up">
+        <div className="text-center">
+          <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white ring-1 ring-slate-200 shadow-sm">
+            <LogoMark className="h-6 w-auto" />
+          </span>
+          <h1 className="mt-6 text-3xl font-extrabold text-navy-900">Área do cliente</h1>
+          <p className="mt-2 text-slate-600">Acesse o painel de gestão de leads.</p>
+        </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 space-y-5 rounded-3xl bg-white p-7 ring-1 ring-slate-200 shadow-[0_30px_70px_-30px_rgb(8_19_58/0.35)] sm:p-8"
+        >
+          <div>
+            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-slate-700">
+              E-mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              placeholder="voce@empresa.com"
+              className={field}
+            />
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="glass rounded-3xl p-8 shadow-xl border border-white/30 space-y-6"
-          >
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-semibold text-zinc-900 flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                E-mail
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="seu@email.com"
-                className="w-full rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3.5 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-              />
-            </div>
+          <div>
+            <label htmlFor="password" className="mb-1.5 block text-sm font-medium text-slate-700">
+              Senha
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              placeholder="••••••••"
+              className={field}
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-semibold text-zinc-900 flex items-center gap-2">
-                <Lock className="w-4 h-4" />
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="••••••••"
-                className="w-full rounded-2xl border border-zinc-200 bg-white/80 px-4 py-3.5 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
-              />
+          {error && (
+            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-sm text-red-800">
+              {error}
             </div>
+          )}
 
-            {error && (
-              <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800 text-sm">
-                {error}
-              </div>
+          <button type="submit" disabled={loading} className={buttonClasses("dark", "lg", "w-full")}>
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Entrando…
+              </>
+            ) : (
+              <>
+                Entrar
+                <ArrowRight className="h-4 w-4" />
+              </>
             )}
+          </button>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full group relative overflow-hidden rounded-2xl !bg-gradient-to-r !from-blue-600 !via-blue-500 !to-orange-500 px-8 py-4 font-semibold text-white shadow-2xl shadow-blue-500/30 transition-all duration-300 hover:shadow-3xl hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                <LogIn className="w-5 h-5" />
-                {loading ? "Entrando..." : "Entrar"}
-              </span>
-            </button>
-          </form>
-        </div>
-      </Container>
-    </Section>
+          <p className="flex items-center justify-center gap-1.5 text-xs text-slate-500">
+            <Lock className="h-3.5 w-3.5" />
+            Conexão segura · acesso restrito à equipe
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }
-
