@@ -11,6 +11,7 @@ import PhoneChat from "@/components/site/PhoneChat";
 import UseCaseTabs from "@/components/site/UseCaseTabs";
 import WorkflowMockup from "@/components/site/WorkflowMockup";
 import IntegrationsMarquee from "@/components/site/IntegrationsMarquee";
+import TeamSection from "@/components/site/TeamSection";
 import { ButtonLink, WhatsAppIcon } from "@/components/ui/Button";
 import { SERVICES, EXTRA_SERVICES, PROCESS, FAQ as FAQ_ITEMS } from "@/content/services";
 import { TEMPLATES, type ChatLine } from "@/content/automations";
@@ -328,8 +329,11 @@ export default function HomePage() {
         </Container>
       </Section>
 
+      {/* ============================== TIME */}
+      <TeamSection />
+
       {/* ============================== FAQ */}
-      <Section className="bg-white">
+      <Section className="bg-slate-50">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
             <div>
