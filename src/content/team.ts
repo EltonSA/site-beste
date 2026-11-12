@@ -63,7 +63,7 @@ export const TEAM: Member[] = [
     ],
     skills: ["Design system", "Arquitetura de fluxos", "UX de conversas", "Design de interfaces", "Identidade visual"],
     icon: PenTool,
-    photo: "/team/gabriel-aires-v2.webp",
+    photo: "/team/gabriel-aires-v3.webp",
     backdrop: "from-violet-100 via-royal-50 to-white",
     accent: "bg-violet-100 text-violet-700",
   },
