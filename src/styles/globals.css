@@ -68,7 +68,7 @@ h1, h2, h3, h4 {
   background: rgb(63 169 245 / 0.25);
 }
 
-:focus-visible {
+:focus-visible:not([tabindex="-1"]) {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 3px;
 }

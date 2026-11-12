@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { MessageCircle, X, Send } from "lucide-react";
 import LogoMark from "./LogoMark";
 import { WhatsAppIcon } from "@/components/ui/Button";
@@ -25,6 +26,7 @@ interface ChatData {
 }
 
 export default function Chatbot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -157,6 +159,9 @@ export default function Chatbot() {
       }, 100);
     }
   }
+
+  // Na página de contato o passo a passo é o foco: esconde os botões flutuantes
+  if (pathname === "/contato") return null;
 
   return (
     <>

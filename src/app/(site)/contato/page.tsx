@@ -1,119 +1,139 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, Clock, CheckCircle2 } from "lucide-react";
+import { Mail, MapPin, Clock, Check, Search, MessageSquare, FileText } from "lucide-react";
 import Container from "@/components/site/Container";
 import Section from "@/components/site/Section";
 import PageHero from "@/components/site/PageHero";
-import ContactForm from "@/components/site/ContactForm";
-import { WhatsAppIcon } from "@/components/ui/Button";
+import ContactWizard from "@/components/site/ContactWizard";
+import { ButtonLink, WhatsAppIcon } from "@/components/ui/Button";
 import { SITE, WHATSAPP_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contato",
-  description: "Fale com a Beste Web e agende um diagnóstico gratuito para automação, IA, sites ou micro-SaaS.",
+  description:
+    "Responda 4 passos rápidos e receba um diagnóstico gratuito de automação para WhatsApp, IA e processos da sua empresa.",
 };
 
-const HOURS = [
-  ["Segunda a sexta", "9h – 18h"],
-  ["Sábado", "9h – 13h"],
-  ["Domingo", "Fechado"],
+const NEXT_STEPS = [
+  { icon: Search, title: "Análise", text: "Um especialista analisa suas respostas e o seu cenário atual." },
+  { icon: MessageSquare, title: "Conversa rápida", text: "Entramos em contato pelo WhatsApp para alinhar os detalhes." },
+  { icon: FileText, title: "Diagnóstico", text: "Você recebe os fluxos recomendados, com escopo, prazo e investimento." },
 ];
+
+const INFO = [
+  { icon: WhatsAppIcon, label: "WhatsApp", value: SITE.phoneDisplay, href: WHATSAPP_URL, external: true },
+  { icon: Mail, label: "E-mail", value: SITE.email, href: `mailto:${SITE.email}` },
+  { icon: Clock, label: "Atendimento", value: "Seg. a sex. 9h–18h · Sáb. 9h–13h" },
+  { icon: MapPin, label: "Localização", value: "Curitiba, PR · atendemos todo o Brasil" },
+];
+
+function Success() {
+  return (
+    <div className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] bg-white shadow-[0_40px_90px_-40px_rgb(8_19_58/0.45)] ring-1 ring-slate-200">
+      <div className="h-1 bg-gradient-brand" />
+      <div className="p-8 text-center sm:p-12">
+        <span className="mx-auto flex h-16 w-16 animate-fade-up items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_12px_30px_-10px_rgb(16_185_129/0.7)]">
+          <Check className="h-8 w-8" strokeWidth={3} />
+        </span>
+        <h2 className="mt-6 text-3xl font-extrabold text-navy-900">Recebemos suas respostas!</h2>
+        <p className="mx-auto mt-3 max-w-lg text-slate-600">
+          Obrigado pelo interesse na Beste Web. Veja o que acontece a partir de agora:
+        </p>
+
+        <ol className="mt-10 grid gap-4 text-left sm:grid-cols-3">
+          {NEXT_STEPS.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <li key={s.title} className="rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200/70">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-royal-50 text-royal-600">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Passo {i + 1}</span>
+                </div>
+                <div className="mt-4 font-semibold text-navy-900">{s.title}</div>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.text}</p>
+              </li>
+            );
+          })}
+        </ol>
+
+        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+          <ButtonLink href={WHATSAPP_URL} external variant="whatsapp" size="lg">
+            <WhatsAppIcon />
+            Adiantar pelo WhatsApp
+          </ButtonLink>
+          <ButtonLink href="/" variant="outline" size="lg">
+            Voltar para o início
+          </ButtonLink>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default async function ContatoPage({ searchParams }: { searchParams: Promise<{ ok?: string }> }) {
   const params = await searchParams;
+  const sent = params?.ok === "1";
 
   return (
     <>
       <PageHero
-        eyebrow="Contato"
+        eyebrow={sent ? "Tudo certo" : "Diagnóstico gratuito"}
         title={
-          <>
-            Vamos <span className="hl">conversar</span>
-          </>
+          sent ? (
+            <>
+              Seu diagnóstico <span className="hl">está a caminho</span>
+            </>
+          ) : (
+            <>
+              Vamos desenhar a <span className="hl">sua automação</span>
+            </>
+          )
         }
-        description="Envie os detalhes do seu projeto. Retornamos com um diagnóstico inicial e uma proposta personalizada."
+        description={
+          sent
+            ? "Nossa equipe já recebeu suas informações."
+            : "Responda 4 passos rápidos — leva cerca de 2 minutos. Com isso, preparamos um diagnóstico com os fluxos que mais vão gerar resultado para o seu negócio."
+        }
       />
 
       <Section className="bg-slate-50 pt-0 sm:pt-0 lg:pt-0">
         <Container>
-          <div className="-mt-10 grid gap-6 sm:-mt-14 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-            <div className="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_30px_60px_-30px_rgb(8_19_58/0.3)] sm:p-10">
-              {params?.ok === "1" && (
-                <div className="mb-8 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-900">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
-                  <div>
-                    <div className="font-semibold">Mensagem enviada com sucesso!</div>
-                    <div className="text-sm text-emerald-800">Nossa equipe entrará em contato em breve.</div>
-                  </div>
-                </div>
-              )}
-              <h2 className="text-2xl font-bold text-navy-900">Conte sobre o seu projeto</h2>
-              <p className="mt-2 text-slate-600">Leva menos de 2 minutos. Respondemos pessoalmente.</p>
-              <div className="mt-8">
-                <ContactForm />
-              </div>
-            </div>
+          <div className="relative -mt-6 sm:-mt-10">{sent ? <Success /> : <ContactWizard />}</div>
 
-            <aside className="space-y-4">
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 rounded-3xl bg-navy-950 p-6 text-white transition-colors hover:bg-navy-900"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#25D366] text-white">
-                  <WhatsAppIcon className="h-6 w-6" />
-                </span>
-                <span>
-                  <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-white/50">
-                    Resposta mais rápida
-                  </span>
-                  <span className="mt-1 block text-lg font-semibold">{SITE.phoneDisplay}</span>
-                  <span className="block text-sm text-white/60 group-hover:text-white/80">Chamar no WhatsApp →</span>
-                </span>
-              </a>
-
-              <div className="rounded-3xl border border-slate-200 bg-white p-6">
-                <ul className="space-y-5">
-                  <li className="flex items-start gap-4">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-royal-50 text-royal-600">
-                      <Mail className="h-5 w-5" />
+          {!sent && (
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {INFO.map((item) => {
+                const Icon = item.icon;
+                const content = (
+                  <>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-royal-600 ring-1 ring-slate-200">
+                      <Icon className="h-4 w-4" />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">E-mail</span>
-                      <a href={`mailto:${SITE.email}`} className="mt-0.5 block break-all font-semibold text-navy-900 hover:text-royal-600">
-                        {SITE.email}
+                      <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">{item.label}</span>
+                      <span className="block truncate text-sm font-semibold text-navy-900">{item.value}</span>
+                    </span>
+                  </>
+                );
+                return (
+                  <li key={item.label}>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className="flex items-center gap-3 rounded-2xl p-3 transition-colors hover:bg-white"
+                      >
+                        {content}
                       </a>
-                    </span>
+                    ) : (
+                      <div className="flex items-center gap-3 p-3">{content}</div>
+                    )}
                   </li>
-                  <li className="flex items-start gap-4">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-royal-50 text-royal-600">
-                      <MapPin className="h-5 w-5" />
-                    </span>
-                    <span>
-                      <span className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Localização</span>
-                      <span className="mt-0.5 block font-semibold text-navy-900">{SITE.location}</span>
-                      <span className="block text-sm text-slate-500">Atendimento remoto em todo o Brasil</span>
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="rounded-3xl border border-slate-200 bg-white p-6">
-                <div className="flex items-center gap-2 text-sm font-semibold text-navy-900">
-                  <Clock className="h-4 w-4 text-royal-600" />
-                  Horário de atendimento
-                </div>
-                <dl className="mt-4 space-y-2.5 text-sm">
-                  {HOURS.map(([d, h]) => (
-                    <div key={d} className="flex justify-between border-b border-dashed border-slate-200 pb-2.5 last:border-0 last:pb-0">
-                      <dt className="text-slate-600">{d}</dt>
-                      <dd className="font-semibold text-navy-900">{h}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </aside>
-          </div>
+                );
+              })}
+            </ul>
+          )}
         </Container>
       </Section>
     </>
