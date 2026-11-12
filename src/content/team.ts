@@ -36,7 +36,7 @@ export const TEAM: Member[] = [
     accent: "bg-orange-100 text-orange-700",
   },
   {
-    name: "Raul Castenoul",
+    name: "Raul Castelnou",
     area: "Análise e Segurança Digital",
     description:
       "Responsável por entender o seu processo a fundo e por garantir que cada automação seja segura, com acessos, credenciais e informações protegidos.",
@@ -47,7 +47,7 @@ export const TEAM: Member[] = [
     ],
     skills: ["Análise de processos", "Segurança da informação", "Controle de acessos", "Privacidade de dados", "Monitoramento"],
     icon: ShieldCheck,
-    photo: "/team/raul-castenoul-v2.webp",
+    photo: "/team/raul-castelnou-v2.webp",
     backdrop: "from-sky-100 via-royal-50 to-white",
     accent: "bg-sky-100 text-sky-700",
   },
