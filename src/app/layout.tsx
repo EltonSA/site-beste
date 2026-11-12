@@ -27,9 +27,6 @@ export const metadata: Metadata = {
     siteName: "Beste Web",
     images: ["/og/og-default.png"],
   },
-  icons: {
-    icon: "/faveicon.ico",
-  },
 };
 
 export const viewport: Viewport = {
