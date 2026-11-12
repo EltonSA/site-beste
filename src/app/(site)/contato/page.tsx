@@ -76,9 +76,10 @@ export default async function ContatoPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <Section className="bg-gradient-to-b from-royal-50 via-slate-50 to-slate-50 pt-24 sm:pt-28 lg:pt-32">
+      <Section className="bg-gradient-to-b from-royal-50 via-slate-50 to-slate-50 pt-20 sm:pt-28 lg:pt-32">
         <Container>
-          <div className="mb-6 max-w-3xl sm:mb-8">
+          {/* no celular fica só o card; o título continua disponível para leitores de tela e SEO */}
+          <div className="sr-only sm:not-sr-only sm:mb-8 sm:block sm:max-w-3xl">
             <h1 className="text-2xl font-extrabold leading-tight text-navy-900 sm:text-4xl text-balance">
               {sent ? (
                 <>
