@@ -25,7 +25,19 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     siteName: "Beste Web",
-    images: ["/og/og-default.png"],
+    images: [
+      {
+        url: "/og/og-beste-web.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Beste Web — Automação de WhatsApp, IA e Processos",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og/og-beste-web.jpg"],
   },
 };
 
