@@ -30,30 +30,88 @@ declare global {
   }
 }
 
-/* ------------------------------------------------------------------ opções */
+/* ------------------------------------------------------------------ perguntas */
 
-const GOALS: { id: string; title: string; text: string; icon: LucideIcon }[] = [
-  { id: "Automação de WhatsApp", title: "Automação de WhatsApp", text: "Atendimento, menus, agenda e follow-up", icon: MessageCircle },
-  { id: "Agente de IA", title: "Agente de IA", text: "Assistente que entende e responde como gente", icon: Bot },
-  { id: "Integrações e CRM", title: "Integrações e CRM", text: "Conectar sistemas e acabar com retrabalho", icon: Workflow },
-  { id: "Processos internos", title: "Processos internos", text: "Relatórios, cobranças e rotinas no automático", icon: Cog },
-  { id: "Site ou landing page", title: "Site ou landing page", text: "Página rápida, integrada às automações", icon: Globe },
-  { id: "Sistema / Micro-SaaS", title: "Sistema / Micro-SaaS", text: "Plataforma própria com login e painel", icon: Rocket },
-  { id: "Ainda não sei", title: "Ainda não sei", text: "Quero orientação sobre o que automatizar", icon: HelpCircle },
+type Option = { value: string; text?: string; icon?: LucideIcon };
+type ChoiceKey = "goal" | "segment" | "team" | "volume" | "timeline";
+
+type Question =
+  | { key: ChoiceKey; stage: number; title: string; text: string; type: "choice"; options: Option[]; cards?: boolean }
+  | { key: "description"; stage: number; title: string; text: string; type: "text" }
+  | { key: "contact"; stage: number; title: string; text: string; type: "contact" };
+
+const QUESTIONS: Question[] = [
+  {
+    key: "goal",
+    stage: 0,
+    type: "choice",
+    cards: true,
+    title: "O que você quer automatizar?",
+    text: "Escolha a opção principal. Os detalhes a gente vê no diagnóstico.",
+    options: [
+      { value: "Automação de WhatsApp", text: "Atendimento, menus, agenda e follow-up", icon: MessageCircle },
+      { value: "Agente de IA", text: "Assistente que entende e responde como gente", icon: Bot },
+      { value: "Integrações e CRM", text: "Conectar sistemas e acabar com retrabalho", icon: Workflow },
+      { value: "Processos internos", text: "Relatórios, cobranças e rotinas no automático", icon: Cog },
+      { value: "Site ou landing page", text: "Página rápida, integrada às automações", icon: Globe },
+      { value: "Sistema / Micro-SaaS", text: "Plataforma própria com login e painel", icon: Rocket },
+      { value: "Ainda não sei", text: "Quero orientação sobre o que automatizar", icon: HelpCircle },
+    ],
+  },
+  {
+    key: "segment",
+    stage: 1,
+    type: "choice",
+    title: "Qual é o segmento da sua empresa?",
+    text: "Assim adaptamos a recomendação à realidade do seu negócio.",
+    options: ["Saúde", "Jurídico", "Contabilidade", "E-commerce", "Imobiliária", "Educação", "Serviços", "Indústria", "Outro"].map((value) => ({ value })),
+  },
+  {
+    key: "team",
+    stage: 1,
+    type: "choice",
+    title: "Qual o tamanho da sua equipe?",
+    text: "Contando todas as pessoas da empresa.",
+    options: ["Só eu", "2 a 10 pessoas", "11 a 50 pessoas", "Mais de 50 pessoas"].map((value) => ({ value })),
+  },
+  {
+    key: "volume",
+    stage: 1,
+    type: "choice",
+    title: "Quantos atendimentos ou conversas vocês têm por mês?",
+    text: "Uma estimativa já ajuda.",
+    options: ["Até 100", "100 a 500", "500 a 2.000", "Mais de 2.000", "Não sei informar"].map((value) => ({ value })),
+  },
+  {
+    key: "timeline",
+    stage: 2,
+    type: "choice",
+    title: "Quando você gostaria de começar?",
+    text: "Isso nos ajuda a planejar o melhor caminho para você.",
+    options: ["O quanto antes", "Em até 30 dias", "Em 1 a 3 meses", "Só pesquisando por enquanto"].map((value) => ({ value })),
+  },
+  {
+    key: "description",
+    stage: 2,
+    type: "text",
+    title: "Como funciona hoje?",
+    text: "Conte em poucas palavras o processo que você quer melhorar. Quanto mais contexto, melhor o diagnóstico.",
+  },
+  {
+    key: "contact",
+    stage: 3,
+    type: "contact",
+    title: "Para onde enviamos seu diagnóstico?",
+    text: "Um especialista vai analisar suas respostas e falar com você.",
+  },
 ];
 
-const SEGMENTS = ["Saúde", "Jurídico", "Contabilidade", "E-commerce", "Imobiliária", "Educação", "Serviços", "Indústria", "Outro"];
-const TEAM_SIZES = ["Só eu", "2 a 10", "11 a 50", "Mais de 50"];
-const VOLUMES = ["Até 100", "100 a 500", "500 a 2.000", "Mais de 2.000"];
-const TOOLS = ["WhatsApp", "Instagram", "Planilhas", "CRM", "ERP", "E-mail", "Nenhuma ainda"];
-const TIMELINES = ["O quanto antes", "Em até 30 dias", "Em 1 a 3 meses", "Só pesquisando"];
-
-const STEPS = [
-  { key: "objetivo", label: "Objetivo", hint: "O que automatizar" },
-  { key: "empresa", label: "Sua empresa", hint: "Segmento e porte" },
-  { key: "cenario", label: "Cenário atual", hint: "Como funciona hoje" },
-  { key: "contato", label: "Contato", hint: "Para onde enviar" },
-] as const;
+const STAGES = [
+  { label: "Objetivo", hint: "O que automatizar" },
+  { label: "Sua empresa", hint: "Segmento e porte" },
+  { label: "Cenário atual", hint: "Prazo e processo" },
+  { label: "Contato", hint: "Para onde enviar" },
+];
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -76,46 +134,6 @@ function track(event: string, data: Record<string, unknown> = {}) {
   }
 }
 
-/* ------------------------------------------------------------------ UI básicos */
-
-function Chip({
-  selected,
-  onClick,
-  children,
-}: {
-  selected: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={selected}
-      className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all",
-        selected
-          ? "bg-navy-900 text-white shadow-[0_6px_16px_-8px_rgb(8_19_58/0.7)]"
-          : "bg-white text-slate-700 ring-1 ring-slate-200 hover:ring-slate-300 hover:text-navy-900",
-      )}
-    >
-      {selected && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
-      {children}
-    </button>
-  );
-}
-
-function FieldGroup({ label, optional, children }: { label: string; optional?: boolean; children: React.ReactNode }) {
-  return (
-    <fieldset>
-      <legend className="mb-3 text-sm font-semibold text-navy-900">
-        {label} {optional && <span className="font-normal text-slate-400">(opcional)</span>}
-      </legend>
-      {children}
-    </fieldset>
-  );
-}
-
 const input =
   "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-[0.95rem] text-navy-900 placeholder:text-slate-400 transition-colors focus:border-royal-500 focus:outline-none focus:ring-4 focus:ring-royal-500/10";
 
@@ -123,16 +141,18 @@ const input =
 
 export default function ContactWizard() {
   const router = useRouter();
-  const [step, setStep] = useState(0);
+  const [index, setIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [advancing, setAdvancing] = useState(false);
 
-  const [goals, setGoals] = useState<string[]>([]);
-  const [segment, setSegment] = useState("");
-  const [team, setTeam] = useState("");
-  const [volume, setVolume] = useState("");
-  const [tools, setTools] = useState<string[]>([]);
-  const [timeline, setTimeline] = useState("");
+  const [answers, setAnswers] = useState<Record<ChoiceKey, string>>({
+    goal: "",
+    segment: "",
+    team: "",
+    volume: "",
+    timeline: "",
+  });
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
@@ -143,44 +163,57 @@ export default function ContactWizard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const interacted = useRef(false);
 
+  const q = QUESTIONS[index];
+  const stage = q.stage;
+  const last = index === QUESTIONS.length - 1;
+
   useEffect(() => {
     if (!interacted.current) return;
     headingRef.current?.focus({ preventScroll: true });
     const top = cardRef.current?.getBoundingClientRect().top ?? 0;
     if (top < 0) cardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [step]);
-
-  const toggle = (list: string[], set: (v: string[]) => void, value: string, exclusive?: string) => {
-    if (list.includes(value)) return set(list.filter((v) => v !== value));
-    if (exclusive && value === exclusive) return set([value]);
-    set([...list.filter((v) => v !== exclusive), value]);
-  };
-
-  function validate(s: number): string | null {
-    if (s === 0 && goals.length === 0) return "Selecione pelo menos uma opção para continuar.";
-    if (s === 1 && !segment) return "Selecione o segmento da sua empresa.";
-    if (s === 1 && !team) return "Selecione o tamanho da sua equipe.";
-    if (s === 2 && description.trim().length < 10) return "Conte em poucas palavras como funciona hoje (mínimo 10 caracteres).";
-    if (s === 3) {
-      if (name.trim().length < 2) return "Informe seu nome.";
-      if (!isEmail(email)) return "Informe um e-mail válido.";
-      if (phone.replace(/\D/g, "").length < 10) return "Informe um WhatsApp válido com DDD.";
-    }
-    return null;
-  }
+  }, [index]);
 
   function goTo(next: number) {
     interacted.current = true;
     setError(null);
-    setStep(next);
+    setIndex(next);
+  }
+
+  function advanceFrom(i: number) {
+    track("contact_step", { step_number: i + 1, step_name: QUESTIONS[i].key });
+    goTo(i + 1);
+  }
+
+  /** escolha única: marca a opção e avança sozinho */
+  function choose(key: ChoiceKey, value: string) {
+    if (advancing) return;
+    setAnswers((a) => ({ ...a, [key]: value }));
+    setAdvancing(true);
+    const from = index;
+    setTimeout(() => {
+      setAdvancing(false);
+      advanceFrom(from);
+    }, 280);
+  }
+
+  function validateContact(): string | null {
+    if (name.trim().length < 2) return "Informe seu nome.";
+    if (!isEmail(email)) return "Informe um e-mail válido.";
+    if (phone.replace(/\D/g, "").length < 10) return "Informe um WhatsApp válido com DDD.";
+    return null;
   }
 
   function handleNext() {
-    const err = validate(step);
+    if (q.type === "choice") {
+      if (!answers[q.key]) return setError("Escolha uma opção para continuar.");
+      return advanceFrom(index);
+    }
+    if (q.type === "text") return advanceFrom(index);
+    const err = validateContact();
     if (err) return setError(err);
-    track("contact_step", { step_number: step + 1, step_name: STEPS[step].key });
-    if (step < STEPS.length - 1) goTo(step + 1);
-    else void submit();
+    track("contact_step", { step_number: index + 1, step_name: q.key });
+    void submit();
   }
 
   async function submit() {
@@ -188,15 +221,14 @@ export default function ContactWizard() {
     setError(null);
 
     const summary = [
-      `Objetivo: ${goals.join(", ")}`,
-      `Segmento: ${segment}`,
-      `Equipe: ${team}`,
-      volume ? `Atendimentos/mês: ${volume}` : "",
-      tools.length > 0 ? `Ferramentas atuais: ${tools.join(", ")}` : "",
-      timeline ? `Prazo: ${timeline}` : "",
+      `Objetivo: ${answers.goal}`,
+      `Segmento: ${answers.segment}`,
+      `Equipe: ${answers.team}`,
+      `Atendimentos/mês: ${answers.volume}`,
+      `Prazo: ${answers.timeline}`,
       company.trim() ? `Empresa: ${company.trim()}` : "",
     ].filter(Boolean);
-    const message = `${summary.join("\n")}\n\nComo funciona hoje:\n${description.trim()}`;
+    const message = `${summary.join("\n")}\n\nComo funciona hoje:\n${description.trim() || "Não informado"}`;
 
     try {
       const res = await fetch("/api/lead", {
@@ -206,13 +238,13 @@ export default function ContactWizard() {
           name: company.trim() ? `${name.trim()} (${company.trim()})` : name.trim(),
           email: email.trim(),
           phone,
-          service: goals.join(", "),
+          service: answers.goal,
           message,
         }),
       });
       const result = await res.json();
       if (res.ok && result.success) {
-        track("generate_lead", { service: goals.join(", "), segment });
+        track("generate_lead", { service: answers.goal, segment: answers.segment });
         router.push("/contato?ok=1");
         router.refresh();
       } else {
@@ -225,13 +257,15 @@ export default function ContactWizard() {
     }
   }
 
-  const progress = ((step + 1) / STEPS.length) * 100;
-  const last = step === STEPS.length - 1;
+  const progress = ((index + 1) / QUESTIONS.length) * 100;
+  const firstOfStage = (s: number) => QUESTIONS.findIndex((x) => x.stage === s);
+  const idx = (key: Question["key"]) => QUESTIONS.findIndex((x) => x.key === key);
+  const showNextButton = q.type !== "choice" || Boolean(answers[q.key]);
 
   return (
     <div
       ref={cardRef}
-      className="scroll-mt-24 grid overflow-clip rounded-[2rem] bg-white shadow-[0_40px_90px_-40px_rgb(8_19_58/0.45)] ring-1 ring-slate-200 lg:grid-cols-[320px_1fr]"
+      className="scroll-mt-20 grid overflow-clip rounded-[2rem] bg-white shadow-[0_40px_90px_-40px_rgb(8_19_58/0.45)] ring-1 ring-slate-200 lg:grid-cols-[300px_1fr]"
     >
       {/* ---------------- lateral (desktop) */}
       <aside className="relative hidden overflow-hidden bg-navy-950 p-8 text-white lg:flex lg:flex-col">
@@ -251,17 +285,17 @@ export default function ContactWizard() {
           </div>
 
           <ol className="mt-10 space-y-1">
-            {STEPS.map((s, i) => {
-              const done = i < step;
-              const current = i === step;
+            {STAGES.map((s, i) => {
+              const done = i < stage;
+              const current = i === stage;
               return (
-                <li key={s.key}>
+                <li key={s.label}>
                   <button
                     type="button"
-                    disabled={i > step}
-                    onClick={() => goTo(i)}
+                    disabled={i > stage}
+                    onClick={() => goTo(firstOfStage(i))}
                     className={cn(
-                      "group flex w-full items-center gap-4 rounded-xl px-3 py-3 text-left transition-colors",
+                      "flex w-full items-center gap-4 rounded-xl px-3 py-3 text-left transition-colors",
                       current && "bg-white/[0.07]",
                       done && "hover:bg-white/5",
                     )}
@@ -288,16 +322,11 @@ export default function ContactWizard() {
 
           <div className="mt-auto rounded-2xl border border-white/10 bg-white/[0.04] p-5">
             <div className="text-sm font-semibold">Prefere conversar agora?</div>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 flex items-center gap-2 text-sm text-white/75 transition-colors hover:text-white"
-            >
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-3 flex items-center gap-2 text-sm text-white/75 hover:text-white">
               <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
               {SITE.phoneDisplay}
             </a>
-            <a href={`mailto:${SITE.email}`} className="mt-2 flex items-center gap-2 break-all text-sm text-white/75 hover:text-white">
+            <a href={`mailto:${SITE.email}`} className="mt-2 flex items-center gap-2 whitespace-nowrap text-[13px] text-white/75 hover:text-white">
               <Mail className="h-4 w-4 shrink-0" />
               {SITE.email}
             </a>
@@ -312,7 +341,7 @@ export default function ContactWizard() {
           e.preventDefault();
           handleNext();
         }}
-        className="flex min-h-[560px] flex-col"
+        className="flex min-h-[520px] flex-col"
       >
         <div className="h-1 bg-slate-100">
           <div className="h-full bg-gradient-brand transition-[width] duration-500 ease-out" style={{ width: `${progress}%` }} />
@@ -321,32 +350,40 @@ export default function ContactWizard() {
         <div className="flex-1 p-6 sm:p-10">
           <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
             <span>
-              Passo {step + 1} de {STEPS.length}
+              Passo {stage + 1} de {STAGES.length}
             </span>
-            <span className="lg:hidden">{STEPS[step].label}</span>
+            <span>{STAGES[stage].label}</span>
           </div>
 
-          <div key={step} className="animate-fade-up [animation-duration:0.45s]">
-            {step === 0 && (
-              <>
-                <StepTitle refEl={headingRef} title="O que você quer automatizar?" text="Pode escolher mais de uma opção." />
-                <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                  {GOALS.map((g) => {
-                    const Icon = g.icon;
-                    const selected = goals.includes(g.id);
-                    return (
-                      <button
-                        key={g.id}
-                        type="button"
-                        aria-pressed={selected}
-                        onClick={() => toggle(goals, setGoals, g.id, "Ainda não sei")}
-                        className={cn(
-                          "relative flex items-start gap-4 rounded-2xl p-4 text-left transition-all",
-                          selected
-                            ? "bg-royal-50 ring-2 ring-royal-600"
-                            : "bg-white ring-1 ring-slate-200 hover:ring-slate-300 hover:shadow-sm",
-                        )}
-                      >
+          <div key={index} className="animate-fade-up [animation-duration:0.4s]">
+            <div className="mt-3">
+              <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-extrabold leading-tight text-navy-900 outline-none sm:text-3xl">
+                {q.title}
+              </h2>
+              <p className="mt-2 text-slate-600">{q.text}</p>
+            </div>
+
+            {/* ---- escolha única (avança sozinho) */}
+            {q.type === "choice" && (
+              <div className={cn("mt-8 grid gap-3", q.cards ? "sm:grid-cols-2" : "sm:grid-cols-2")} role="radiogroup" aria-label={q.title}>
+                {q.options.map((o) => {
+                  const selected = answers[q.key] === o.value;
+                  const Icon = o.icon;
+                  return (
+                    <button
+                      key={o.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      onClick={() => choose(q.key, o.value)}
+                      className={cn(
+                        "group flex items-center gap-4 rounded-2xl p-4 text-left transition-all",
+                        selected
+                          ? "bg-royal-50 ring-2 ring-royal-600"
+                          : "bg-white ring-1 ring-slate-200 hover:bg-slate-50 hover:ring-slate-300",
+                      )}
+                    >
+                      {Icon && (
                         <span
                           className={cn(
                             "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors",
@@ -355,103 +392,44 @@ export default function ContactWizard() {
                         >
                           <Icon className="h-5 w-5" />
                         </span>
-                        <span className="min-w-0 pr-6">
-                          <span className="block font-semibold text-navy-900">{g.title}</span>
-                          <span className="mt-0.5 block text-sm leading-snug text-slate-500">{g.text}</span>
-                        </span>
-                        <span
-                          className={cn(
-                            "absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-md border transition-colors",
-                            selected ? "border-royal-600 bg-royal-600 text-white" : "border-slate-300 bg-white",
-                          )}
-                        >
-                          {selected && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
+                      )}
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-semibold text-navy-900">{o.value}</span>
+                        {o.text && <span className="mt-0.5 block text-sm leading-snug text-slate-500">{o.text}</span>}
+                      </span>
+                      <span
+                        className={cn(
+                          "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                          selected ? "border-royal-600 bg-royal-600 text-white" : "border-slate-300 group-hover:border-slate-400",
+                        )}
+                      >
+                        {selected && <Check className="h-3 w-3" strokeWidth={3.5} />}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             )}
 
-            {step === 1 && (
-              <>
-                <StepTitle refEl={headingRef} title="Conte um pouco sobre sua empresa" text="Assim adaptamos a recomendação à realidade do seu negócio." />
-                <div className="mt-8 space-y-8">
-                  <FieldGroup label="Segmento">
-                    <div className="flex flex-wrap gap-2">
-                      {SEGMENTS.map((s) => (
-                        <Chip key={s} selected={segment === s} onClick={() => setSegment(s)}>
-                          {s}
-                        </Chip>
-                      ))}
-                    </div>
-                  </FieldGroup>
-                  <FieldGroup label="Tamanho da equipe">
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {TEAM_SIZES.map((s) => (
-                        <Chip key={s} selected={team === s} onClick={() => setTeam(s)}>
-                          {s}
-                        </Chip>
-                      ))}
-                    </div>
-                  </FieldGroup>
-                  <FieldGroup label="Atendimentos ou conversas por mês" optional>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {VOLUMES.map((s) => (
-                        <Chip key={s} selected={volume === s} onClick={() => setVolume(volume === s ? "" : s)}>
-                          {s}
-                        </Chip>
-                      ))}
-                    </div>
-                  </FieldGroup>
-                </div>
-              </>
+            {/* ---- texto livre */}
+            {q.type === "text" && (
+              <div className="mt-8">
+                <textarea
+                  id="wz-desc"
+                  rows={6}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Ex.: Recebemos cerca de 80 mensagens por dia no WhatsApp e duas pessoas respondem manualmente. Muitos orçamentos ficam sem retorno…"
+                  aria-label={q.title}
+                  className={cn(input, "resize-none")}
+                />
+                <p className="mt-2 text-xs text-slate-400">Opcional, mas ajuda muito no diagnóstico.</p>
+              </div>
             )}
 
-            {step === 2 && (
+            {/* ---- contato */}
+            {q.type === "contact" && (
               <>
-                <StepTitle refEl={headingRef} title="Como funciona hoje?" text="Descreva o processo que você quer melhorar. Quanto mais contexto, melhor o diagnóstico." />
-                <div className="mt-8 space-y-8">
-                  <div>
-                    <label htmlFor="wz-desc" className="mb-3 block text-sm font-semibold text-navy-900">
-                      Processo atual
-                    </label>
-                    <textarea
-                      id="wz-desc"
-                      rows={5}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Ex.: Recebemos cerca de 80 mensagens por dia no WhatsApp e duas pessoas respondem manualmente. Muitos orçamentos ficam sem retorno…"
-                      className={cn(input, "resize-none")}
-                    />
-                    <div className="mt-1.5 text-right text-xs text-slate-400">{description.trim().length} caracteres</div>
-                  </div>
-                  <FieldGroup label="Ferramentas que você já usa" optional>
-                    <div className="flex flex-wrap gap-2">
-                      {TOOLS.map((t) => (
-                        <Chip key={t} selected={tools.includes(t)} onClick={() => toggle(tools, setTools, t, "Nenhuma ainda")}>
-                          {t}
-                        </Chip>
-                      ))}
-                    </div>
-                  </FieldGroup>
-                  <FieldGroup label="Quando você gostaria de começar?" optional>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                      {TIMELINES.map((t) => (
-                        <Chip key={t} selected={timeline === t} onClick={() => setTimeline(timeline === t ? "" : t)}>
-                          {t}
-                        </Chip>
-                      ))}
-                    </div>
-                  </FieldGroup>
-                </div>
-              </>
-            )}
-
-            {step === 3 && (
-              <>
-                <StepTitle refEl={headingRef} title="Para onde enviamos seu diagnóstico?" text="Um especialista vai analisar suas respostas e falar com você." />
                 <div className="mt-8 grid gap-5 sm:grid-cols-2">
                   <div>
                     <label htmlFor="wz-name" className="mb-1.5 block text-sm font-semibold text-navy-900">
@@ -491,16 +469,18 @@ export default function ContactWizard() {
                 <div className="mt-8 rounded-2xl bg-slate-50 p-5 ring-1 ring-slate-200/70">
                   <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Resumo</div>
                   <dl className="mt-3 grid gap-x-6 gap-y-2.5 text-sm sm:grid-cols-[auto_1fr]">
-                    {[
-                      ["Objetivo", goals.join(", "), 0],
-                      ["Empresa", [segment, team && `equipe ${team.toLowerCase()}`, volume && `${volume} atend./mês`].filter(Boolean).join(" · "), 1],
-                      ["Prazo", timeline || "Não informado", 2],
-                    ].map(([k, v, target]) => (
-                      <div key={k as string} className="contents">
+                    {(
+                      [
+                        ["Objetivo", answers.goal, idx("goal")],
+                        ["Empresa", [answers.segment, answers.team, answers.volume !== "Não sei informar" && answers.volume && `${answers.volume} atend./mês`].filter(Boolean).join(" · "), idx("segment")],
+                        ["Prazo", answers.timeline, idx("timeline")],
+                      ] as [string, string, number][]
+                    ).map(([k, v, target]) => (
+                      <div key={k} className="contents">
                         <dt className="font-medium text-slate-500">{k}</dt>
                         <dd className="flex items-start justify-between gap-3 text-navy-900">
                           <span>{v}</span>
-                          <button type="button" onClick={() => goTo(target as number)} className="shrink-0 text-xs font-semibold text-royal-600 hover:underline">
+                          <button type="button" onClick={() => goTo(target)} className="shrink-0 text-xs font-semibold text-royal-600 hover:underline">
                             Editar
                           </button>
                         </dd>
@@ -519,57 +499,46 @@ export default function ContactWizard() {
           )}
         </div>
 
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-3 border-t border-slate-200/80 bg-white/90 px-6 py-4 backdrop-blur-md sm:px-10">
-          {step > 0 ? (
-            <button type="button" onClick={() => goTo(step - 1)} className={buttonClasses("outline", "md")}>
+        <div className="sticky bottom-0 z-10 flex min-h-[72px] items-center justify-between gap-3 border-t border-slate-200/80 bg-white/90 px-6 py-4 backdrop-blur-md sm:px-10">
+          {index > 0 ? (
+            <button type="button" onClick={() => goTo(index - 1)} className={buttonClasses("outline", "md")}>
               <ArrowLeft className="h-4 w-4" />
               Voltar
             </button>
           ) : (
-            <span className="hidden items-center gap-1.5 text-xs text-slate-500 sm:inline-flex">
+            <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
               <Lock className="h-3.5 w-3.5" />
               Seus dados ficam só com a gente
             </span>
           )}
-          <button type="submit" disabled={submitting} className={buttonClasses("dark", "lg", "ml-auto")}>
-            {submitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Enviando…
-              </>
-            ) : last ? (
-              <>
-                Enviar e receber diagnóstico
-                <ArrowRight className="h-4 w-4" />
-              </>
-            ) : (
-              <>
-                Continuar
-                <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </button>
+
+          {showNextButton && (
+            <button type="submit" disabled={submitting || advancing} className={buttonClasses("dark", "lg", "ml-auto")}>
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Enviando…
+                </>
+              ) : last ? (
+                <>
+                  Enviar e receber diagnóstico
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              ) : q.type === "text" && !description.trim() ? (
+                <>
+                  Pular
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  Continuar
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+          )}
         </div>
       </form>
-    </div>
-  );
-}
-
-function StepTitle({
-  title,
-  text,
-  refEl,
-}: {
-  title: string;
-  text: string;
-  refEl: React.RefObject<HTMLHeadingElement | null>;
-}) {
-  return (
-    <div className="mt-3">
-      <h2 ref={refEl} tabIndex={-1} className="text-2xl font-extrabold leading-tight text-navy-900 outline-none sm:text-3xl">
-        {title}
-      </h2>
-      <p className="mt-2 text-slate-600">{text}</p>
     </div>
   );
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Mail, MapPin, Clock, Check, Search, MessageSquare, FileText } from "lucide-react";
 import Container from "@/components/site/Container";
 import Section from "@/components/site/Section";
-import PageHero from "@/components/site/PageHero";
 import ContactWizard from "@/components/site/ContactWizard";
 import { ButtonLink, WhatsAppIcon } from "@/components/ui/Button";
 import { SITE, WHATSAPP_URL } from "@/lib/site";
@@ -77,29 +76,28 @@ export default async function ContatoPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <PageHero
-        eyebrow={sent ? "Tudo certo" : "Diagnóstico gratuito"}
-        title={
-          sent ? (
-            <>
-              Seu diagnóstico <span className="hl">está a caminho</span>
-            </>
-          ) : (
-            <>
-              Vamos desenhar a <span className="hl">sua automação</span>
-            </>
-          )
-        }
-        description={
-          sent
-            ? "Nossa equipe já recebeu suas informações."
-            : "Responda 4 passos rápidos — leva cerca de 2 minutos. Com isso, preparamos um diagnóstico com os fluxos que mais vão gerar resultado para o seu negócio."
-        }
-      />
-
-      <Section className="bg-slate-50 pt-0 sm:pt-0 lg:pt-0">
+      <Section className="bg-gradient-to-b from-royal-50 via-slate-50 to-slate-50 pt-24 sm:pt-28 lg:pt-32">
         <Container>
-          <div className="relative -mt-6 sm:-mt-10">{sent ? <Success /> : <ContactWizard />}</div>
+          <div className="mb-6 max-w-3xl sm:mb-8">
+            <h1 className="text-2xl font-extrabold leading-tight text-navy-900 sm:text-4xl text-balance">
+              {sent ? (
+                <>
+                  Seu diagnóstico <span className="hl">está a caminho</span>
+                </>
+              ) : (
+                <>
+                  Vamos desenhar a <span className="hl">sua automação</span>
+                </>
+              )}
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:mt-3 sm:text-base">
+              {sent
+                ? "Nossa equipe já recebeu suas informações."
+                : "Responda 4 passos rápidos — leva cerca de 2 minutos. Com isso, preparamos um diagnóstico com os fluxos que mais vão gerar resultado para o seu negócio."}
+            </p>
+          </div>
+
+          <div className="relative">{sent ? <Success /> : <ContactWizard />}</div>
 
           {!sent && (
             <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
